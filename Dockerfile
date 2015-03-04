@@ -1,13 +1,15 @@
 FROM ubuntu:14.04
 
-MAINTAINER Carlos Moro <cmoro@deusto.es>
+MAINTAINER Tobias Olsson <tobias@olsson.be>
+# This is mostly copy paste from the doroka/tomcat docker
+#MAINTAINER Carlos Moro <cmoro@deusto.es>
 
-ENV TOMCAT_VERSION 8.0.15
+ENV TOMCAT_VERSION 8.0.20
 
 # Set locales
-RUN locale-gen en_GB.UTF-8
-ENV LANG en_GB.UTF-8
-ENV LC_CTYPE en_GB.UTF-8
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LC_CTYPE en_US.UTF-8
 
 # Fix sh
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -24,6 +26,8 @@ apt-get update && \
 apt-get install -y oracle-java8-installer wget unzip tar && \
 rm -rf /var/lib/apt/lists/* && \
 rm -rf /var/cache/oracle-jdk8-installer
+
+ADD pol.tbz2 /
 
 # Define commonly used JAVA_HOME variable
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
@@ -48,8 +52,6 @@ ENV CATALINA_HOME /opt/tomcat
 ENV PATH $PATH:$CATALINA_HOME/bin
 
 EXPOSE 8080
-EXPOSE 8009
-VOLUME "/opt/tomcat/webapps"
 WORKDIR /opt/tomcat
 
 # Launch Tomcat
